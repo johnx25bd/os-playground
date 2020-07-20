@@ -1,0 +1,14 @@
+{
+"name": "hydroshed2",
+"description": "hydroshed2",
+"version": "2",
+"minzoom": "5",
+"maxzoom": "12",
+"center": "-5.668945,55.949192,12",
+"bounds": "-8.650000,49.862500,1.737500,59.395833",
+"type": "overlay",
+"format": "pbf",
+"generator": "tippecanoe v1.34.3",
+"generator_options": "tippecanoe -ab -z12 -Z5 -e hydroshed2 -l gb-hydroshed gb-hydroshed-full.json",
+"json": "{\"vector_layers\": [ { \"id\": \"gb-hydroshed\", \"description\": \"\", \"minzoom\": 5, \"maxzoom\": 12, \"fields\": {} } ],\"tilestats\": {\"layerCount\": 1,\"layers\": [{\"layer\": \"gb-hydroshed\",\"count\": 49089,\"geometry\": \"Polygon\",\"attributeCount\": 0,\"attributes\": []}]}}"
+}
