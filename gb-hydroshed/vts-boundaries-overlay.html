@@ -23,7 +23,7 @@
 var apiKey = prompt('Add OS Data Hub API key', '');
 
     var osVectorTileServiceUrl = 'https://api.os.uk/maps/vector/v1/vts',
-        bndyVectorTileServiceUrl = '0.0.0.0:8000';
+        // bndyVectorTileServiceUrl = '0.0.0.0:8000';
 
     // Initialize the map object.
     map = new mapboxgl.Map({
@@ -53,7 +53,7 @@ var apiKey = prompt('Add OS Data Hub API key', '');
 
         map.addSource("test", {
             "type": "vector",
-            "tiles": [ bndyVectorTileServiceUrl + "/hydroshed/{z}/{x}/{y}.pbf" ],
+            "tiles": [ "./hydroshed/{z}/{x}/{y}.pbf" ],
         });
 
         map.addLayer({
