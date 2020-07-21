@@ -45,7 +45,7 @@
 
 <body>
   <div id="map"></div>
-  <pre id="features"></pre>
+  <!-- <pre id="features"></pre> -->
 
 
   <script src="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.js"></script>
@@ -143,35 +143,35 @@
 
        
       // Add click event handler.
-      map.on('click', function (e) {
-        var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
+    //   map.on('click', function (e) {
+    //     var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
 
-        var features = map.queryRenderedFeatures(e.point);
+    //     var features = map.queryRenderedFeatures(e.point);
 
-        var displayProperties = [
-          'type',
-          'properties',
-          'layer',
-          'sourceLayer'
-        ];
+    //     var displayProperties = [
+    //       'type',
+    //       'properties',
+    //       'layer',
+    //       'sourceLayer'
+    //     ];
 
-        var displayFeatures = features.map(function (feat) {
-          var displayFeat = {};
-          displayProperties.forEach(function (prop) {
-            displayFeat[prop] = feat[prop];
-          });
-          return displayFeat;
-        });
+    //     var displayFeatures = features.map(function (feat) {
+    //       var displayFeat = {};
+    //       displayProperties.forEach(function (prop) {
+    //         displayFeat[prop] = feat[prop];
+    //       });
+    //       return displayFeat;
+    //     });
 
-        displayFeatures = uniqueArray(displayFeatures);
+    //     displayFeatures = uniqueArray(displayFeatures);
 
-        document.getElementById('features').innerHTML = JSON.stringify(
-          displayFeatures,
-          null,
-          2
-        );
-      }); 
-    });
+    //     document.getElementById('features').innerHTML = JSON.stringify(
+    //       displayFeatures,
+    //       null,
+    //       2
+    //     );
+    //   }); 
+    // });
   </script>
 </body>
 
