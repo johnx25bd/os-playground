@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 
+<!-- 
+This product **GB Hydrosheds** incorporates data from the HydroSHEDS 
+database which is © World Wildlife Fund, Inc. (2006-2013) and has been 
+used herein under license. WWF has not evaluated the data as altered 
+and incorporated within **GB Hydrosheds**, and therefore gives no 
+warranty regarding its accuracy, completeness, currency or suitability 
+for any particular purpose. 
+
+Portions of the HydroSHEDS database incorporate data which are the 
+intellectual property rights of © USGS (2006-2008), NASA (2000-2005),
+ESRI (1992-1998), CIAT (2004-2006), UNEP-WCMC (1993), WWF (2004), 
+Commonwealth of Australia (2007), and Her Royal Majesty and the British 
+Crown and are used under license. The HydroSHEDS database and more 
+information are available at http://www.hydrosheds.org._ -->
+
 <html>
 
 <head>
   <title></title>
-
   <meta charset="utf-8" />
-
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-
   <link rel="stylesheet" href="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.css" />
-
   <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" />
-
   <style>
     body {
       margin: 0;
       padding: 0;
+
     }
 
     #map {
@@ -39,12 +50,123 @@
       width: 24%;
       overflow: auto;
       background: rgba(255, 255, 255, 0.8);
+      
+    }
+
+    @media only screen and (max-width: 768px) {
+      #overlay { width: 100%;}
+    }
+
+    #overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      max-width: 25%;
+      min-width: 20%;
+      padding: 10px;
+      background: white;
+      font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        position: absolute;
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        padding: 15px;
+    }
+
+    #overlay h1 {
+      line-height: 1.1;
+      margin-top: 0px;
+    }
+
+    #overlay p {
+      margin-top:10px;
+    }
+    /* The switch - the box around the slider */
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 54px;
+      height: 24px;
+    }
+
+    /* Hide default HTML checkbox */
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 5px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked+.slider {
+      background-color: rgba(255, 31, 91);
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px rgba(255, 31, 91
+      );
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
     }
   </style>
 </head>
 
 <body>
   <div id="map"></div>
+  <div id='overlay'>
+    <h1>Watersheds of Great Britain</h1>
+    <p>A map using the <a href='https://osdatahub.os.uk/docs/vts/overview', target='_blank'>OS Vector Tile API</a> and <a href='https://www.hydrosheds.org/' target='_blank'>HydroSHEDS dataset</a> to show the various watershed areas of Great Britain. Inspired by <a href='https://decolonialatlas.wordpress.com/2019/11/19/watersheds-of-the-world/' target="_blank">Watersheds of the World</a>. </p>
+      <p>Built with QGIS, Tippecanoe, Mapbox GL JS and 💛 by <a href='https://twitter.com/johnx25bd' target='_blank'>@johnx25bd</a>. </p>
+    <!-- Rounded switch - from https://www.w3schools.com/howto/howto_css_switch.asp -->
+   <div>
+      <span> <label class="switch">
+          <input id='labels' type="checkbox">
+          <span class="slider round"></span>
+        </label></span>
+        <span style='vertical-align:bottom;'><i>Toggle for extra context.</i></span>
+   </div>
+    
+  </div>
   <!-- <pre id="features"></pre> -->
 
 
@@ -68,13 +190,14 @@
       center: [-1.485, 52.567],
       zoom: 7,
       transformRequest: (url) => {
-        
-        if (url.includes('os.uk/maps')){
+
+        if (url.includes('os.uk/maps')) {
           if (!url.includes(apiKey))
             url += '?key=' + apiKey
           return {
             url: url + "&srs=3857",
-          };}
+          };
+        }
       },
     });
 
@@ -92,9 +215,18 @@
     map.on('style.load', function () {
 
       // Set visibility of roads and some labels to none:
-      map.getStyle().layers.filter(l => l.id.includes('Road')).map(l => map.setLayoutProperty(l.id, 'visibility', 'none'))
-      map.setLayoutProperty('OS/Names/National/Town:3', 'visibility', 'none')
-      map.setLayoutProperty('OS/Names/National/National Park:1', 'visibility', 'none')
+      // map.getStyle().layers.filter(l => l.id.includes('Road')).map(l => map.setLayoutProperty(l.id, 'visibility', 'none'))
+      // map.setLayoutProperty('OS/Names/National/Town:3', 'visibility', 'none')
+      // map.setLayoutProperty('OS/Names/National/National Park:1', 'visibility', 'none')
+
+      map.getStyle().layers.filter(l =>
+        !l.id.includes('water') &&
+        !l.id.includes('Water') &&
+        !l.id.includes('hydro') &&
+        !l.id.includes('Background') &&
+        !l.id.includes('_land') &&
+        !l.id.includes('Contour')).map(l =>
+          map.setLayoutProperty(l.id, 'visibility', 'none'))
 
       // Set water layers a touch darker, to raise them in the visual hierarchy
       map.getStyle().layers.filter(l => l.id.includes('Surfacewater')).map(l => map.setPaintProperty(l.id, 'fill-color', '#3c93c2'))
@@ -144,36 +276,57 @@
       }, 'OS/Surfacewater/Local');
 
 
-       
+      const checkbox = document.getElementById('labels')
+
+      checkbox.addEventListener('change', (event) => {
+        if (event.target.checked) {
+          // add labels in
+
+          map.getStyle().layers.map(l => map.setLayoutProperty(l.id, 'visibility', 'visible'))
+          map.getStyle().layers.filter(l => l.id.includes('Road')).map(l => map.setLayoutProperty(l.id, 'visibility', 'none'))
+
+        } else {
+          // remove labels
+          map.getStyle().layers.filter(l =>
+            !l.id.includes('water') &&
+            !l.id.includes('Water') &&
+            !l.id.includes('hydro') &&
+            !l.id.includes('Background') &&
+            !l.id.includes('_land') &&
+            !l.id.includes('Contour')).map(l =>
+              map.setLayoutProperty(l.id, 'visibility', 'none'))
+        }
+      })
+
       // Add click event handler.
-    //   map.on('click', function (e) {
-    //     var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
+      //   map.on('click', function (e) {
+      //     var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
 
-    //     var features = map.queryRenderedFeatures(e.point);
+      //     var features = map.queryRenderedFeatures(e.point);
 
-    //     var displayProperties = [
-    //       'type',
-    //       'properties',
-    //       'layer',
-    //       'sourceLayer'
-    //     ];
+      //     var displayProperties = [
+      //       'type',
+      //       'properties',
+      //       'layer',
+      //       'sourceLayer'
+      //     ];
 
-    //     var displayFeatures = features.map(function (feat) {
-    //       var displayFeat = {};
-    //       displayProperties.forEach(function (prop) {
-    //         displayFeat[prop] = feat[prop];
-    //       });
-    //       return displayFeat;
-    //     });
+      //     var displayFeatures = features.map(function (feat) {
+      //       var displayFeat = {};
+      //       displayProperties.forEach(function (prop) {
+      //         displayFeat[prop] = feat[prop];
+      //       });
+      //       return displayFeat;
+      //     });
 
-    //     displayFeatures = uniqueArray(displayFeatures);
+      //     displayFeatures = uniqueArray(displayFeatures);
 
-    //     document.getElementById('features').innerHTML = JSON.stringify(
-    //       displayFeatures,
-    //       null,
-    //       2
-    //     );
-    //   }); 
+      //     document.getElementById('features').innerHTML = JSON.stringify(
+      //       displayFeatures,
+      //       null,
+      //       2
+      //     );
+      //   }); 
     });
   </script>
 </body>
