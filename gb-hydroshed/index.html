@@ -53,7 +53,7 @@
   <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
 
   <script>
-    var apiKey = prompt('Add OS Data Hub API key', '');
+    var apiKey = 'f7Kc1U5GO9L0D9RpxPGzA9GfASUdhj2O';
 
     var osVectorTileServiceUrl = "https://api.os.uk/maps/vector/v1/vts",
       osVectorTileServiceWaterUrl = " https://api.os.uk/maps/vector/v1/vts/water";
@@ -64,14 +64,17 @@
       container: "map",
       minZoom: 6,
       maxZoom: 18,
-      style: osVectorTileServiceUrl + "/resources/styles?key=" + apiKey,
+      style: './style/greyscale.json?key=' + apiKey,//osVectorTileServiceUrl + "/resources/styles?key=" + apiKey,
       center: [-1.485, 52.567],
       zoom: 7,
       transformRequest: (url) => {
-        if (url.includes('os.uk'))
+        
+        if (url.includes('os.uk/maps')){
+          if (!url.includes(apiKey))
+            url += '?key=' + apiKey
           return {
             url: url + "&srs=3857",
-          };
+          };}
       },
     });
 
@@ -117,7 +120,7 @@
         "source-layer": "gb-hydroshed", // from input filename
         layout: {},
         paint: {
-          "fill-color": "rgba(255, 31, 91, 0.2)"
+          "fill-color": "rgba(255, 31, 91, 0.15)"
         },
       }, 'OS/Surfacewater/Local');
 
