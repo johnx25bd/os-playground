@@ -21,7 +21,21 @@ information are available at http://www.hydrosheds.org._ -->
   <title></title>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous">
+
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+
   <link rel="stylesheet" href="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.css" />
+
   <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" />
   <style>
     body {
@@ -50,27 +64,22 @@ information are available at http://www.hydrosheds.org._ -->
       width: 24%;
       overflow: auto;
       background: rgba(255, 255, 255, 0.8);
-      
-    }
 
-    @media only screen and (max-width: 768px) {
-      #overlay { width: 100%;}
     }
 
     #overlay {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      max-width: 25%;
-      min-width: 20%;
-      padding: 10px;
+      /* top: 20px;
+      left: 20px; */
+      /* max-width: 25%;
+      min-width: 20%; */
+      /* padding: 10px; */
       background: white;
       font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        position: absolute;
-        background-color: #fff;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        padding: 15px;
+      /* position: absolute; */
+      background-color: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      /* padding: 15px; */
     }
 
     #overlay h1 {
@@ -79,8 +88,9 @@ information are available at http://www.hydrosheds.org._ -->
     }
 
     #overlay p {
-      margin-top:10px;
+      margin-top: 10px;
     }
+
     /* The switch - the box around the slider */
 
     .switch {
@@ -129,8 +139,7 @@ information are available at http://www.hydrosheds.org._ -->
     }
 
     input:focus+.slider {
-      box-shadow: 0 0 1px rgba(255, 31, 91
-      );
+      box-shadow: 0 0 1px rgba(255, 31, 91);
     }
 
     input:checked+.slider:before {
@@ -153,20 +162,31 @@ information are available at http://www.hydrosheds.org._ -->
 
 <body>
   <div id="map"></div>
-  <div id='overlay'>
+  <div class='container-fluid'>
+  <div id='overlay' class='col-lg-3 col-md-6 col-sm-12 m-3 p-3'>
     <h1>Watersheds of Great Britain</h1>
-    <p>A map using the <a href='https://osdatahub.os.uk/docs/vts/overview', target='_blank'>OS Vector Tile API</a> and <a href='https://www.hydrosheds.org/' target='_blank'>HydroSHEDS dataset</a> to show the various watershed areas of Great Britain. Inspired by <a href='https://decolonialatlas.wordpress.com/2019/11/19/watersheds-of-the-world/' target="_blank">Watersheds of the World</a>. </p>
-      <p>Built with QGIS, Tippecanoe, Mapbox GL JS and 💛 by <a href='https://twitter.com/johnx25bd' target='_blank'>@johnx25bd</a>. </p>
+    <p>A map using the
+      <a href='https://osdatahub.os.uk/docs/vts/overview' , target='_blank'>OS Vector Tile API</a> and
+      <a href='https://www.hydrosheds.org/' target='_blank'>HydroSHEDS dataset</a> to show the various watershed areas of Great Britain. Inspired by
+      <a href='https://decolonialatlas.wordpress.com/2019/11/19/watersheds-of-the-world/'
+        target="_blank">Watersheds of the World</a>. </p>
+    <p>Built with QGIS, Tippecanoe, Mapbox GL JS and 💛 by
+      <a href='https://twitter.com/johnx25bd' target='_blank'>@johnx25bd</a>. </p>
     <!-- Rounded switch - from https://www.w3schools.com/howto/howto_css_switch.asp -->
-   <div>
-      <span> <label class="switch">
+    <div>
+      <span>
+        <label class="switch mb-0">
           <input id='labels' type="checkbox">
           <span class="slider round"></span>
-        </label></span>
-        <span style='vertical-align:bottom;'><i>Toggle for extra context.</i></span>
-   </div>
-    
+        </label>
+      </span>
+      <span style='vertical-align:bottom;'>
+        <i>Toggle for extra context.</i>
+      </span>
+    </div>
+
   </div>
+</div>
   <!-- <pre id="features"></pre> -->
 
 
@@ -186,7 +206,7 @@ information are available at http://www.hydrosheds.org._ -->
       container: "map",
       minZoom: 6,
       maxZoom: 14,
-      style: './style/greyscale.json?key=' + apiKey,//osVectorTileServiceUrl + "/resources/styles?key=" + apiKey,
+      style: 'https://raw.githubusercontent.com/OrdnanceSurvey/OS-Vector-Tile-API-Stylesheets/master/OS_VTS_3857_Greyscale.json',//osVectorTileServiceUrl + "/resources/styles?key=" + apiKey,
       center: [-1.485, 52.567],
       zoom: 7,
       transformRequest: (url) => {
@@ -297,6 +317,10 @@ information are available at http://www.hydrosheds.org._ -->
               map.setLayoutProperty(l.id, 'visibility', 'none'))
         }
       })
+
+      // function testWidth() {
+      //   if (window.)
+      // }
 
       // Add click event handler.
       //   map.on('click', function (e) {
