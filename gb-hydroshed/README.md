@@ -1,0 +1,6 @@
+# GB Hydrosheds
+
+A map using the OS Vector Tile API and HydroSHEDS dataset to show the various watershed areas of Great Britain. "HydroSHEDS is derived primarily from elevation data of the Shuttle Radar Topography Mission (SRTM) at 3 arc-second resolution.'
+
+
+_This product **GB Hydrosheds** incorporates data from the HydroSHEDS database which is © World Wildlife Fund, Inc. (2006-2013) and has been used herein under license. WWF has not evaluated the data as altered and incorporated within **GB Hydrosheds**, and therefore gives no warranty regarding its accuracy, completeness, currency or suitability for any particular purpose. Portions of the HydroSHEDS database incorporate data which are the intellectual property rights of © USGS (2006-2008), NASA (2000-2005), ESRI (1992-1998), CIAT (2004-2006), UNEP-WCMC (1993), WWF (2004), Commonwealth of Australia (2007), and Her Royal Majesty and the British Crown and are used under license. The HydroSHEDS database and more information are available at http://www.hydrosheds.org._

@@ -1,132 +1,150 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <title></title>
 
-    <meta charset="utf-8" />
+<head>
+  <title></title>
 
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
+  <meta charset="utf-8" />
 
-    <link
-      rel="stylesheet"
-      href="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.css"
-    />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
-    <link
-      rel="stylesheet"
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css"
-    />
+  <link rel="stylesheet" href="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.css" />
 
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
+  <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" />
 
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-      }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-      :focus {
-        outline: none;
-      }
-    </style>
-  </head>
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
 
-  <body>
-    <div id="map"></div>
+    :focus {
+      outline: none;
+    }
 
-    <script src="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.js"></script>
 
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+    #features {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 24px;
+      width: 24%;
+      overflow: auto;
+      background: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
 
-    <script>
-      var apiKey = prompt('Add OS Data Hub API key', '');
+<body>
+  <div id="map"></div>
+  <!-- <pre id="features"></pre> -->
 
-      var osVectorTileServiceUrl = "https://api.os.uk/maps/vector/v1/vts",
-        localVectorTileServiceUrl = "http://0.0.0.0:8000/hydroshed";
 
-      // Initialize the map object.
+  <script src="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.js"></script>
 
-      map = new mapboxgl.Map({
-        container: "map",
-        minZoom: 6,
-        maxZoom: 18,
-        style: osVectorTileServiceUrl + "/resources/styles?key=" + apiKey,
-        center: [-1.485, 52.567],
-        zoom: 7,
-        transformRequest: (url) => {
-          if (url.includes(osVectorTileServiceUrl))
-            return {
-              url: url + "&srs=3857",
-            };
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+
+  <script>
+    var apiKey = prompt('Add OS Data Hub API key', '');
+
+    var osVectorTileServiceUrl = "https://api.os.uk/maps/vector/v1/vts",
+      osVectorTileServiceWaterUrl = " https://api.os.uk/maps/vector/v1/vts/water";
+
+    // Initialize the map object.
+
+    map = new mapboxgl.Map({
+      container: "map",
+      minZoom: 6,
+      maxZoom: 18,
+      style: osVectorTileServiceUrl + "/resources/styles?key=" + apiKey,
+      center: [-1.485, 52.567],
+      zoom: 7,
+      transformRequest: (url) => {
+        if (url.includes('os.uk'))
+          return {
+            url: url + "&srs=3857",
+          };
+      },
+    });
+
+    map.dragRotate.disable(); // Disable map rotation using right click + drag.
+    map.touchZoomRotate.disableRotation(); // Disable map rotation using touch rotation gesture.
+
+    // Add navigation control (excluding compass button) to the map.
+
+    map.addControl(
+      new mapboxgl.NavigationControl({
+        showCompass: false,
+      })
+    );
+
+    map.on("load", function () {
+      // Add a source for the boundary polygons.
+
+      map.addSource("gb-hydroshed", {
+        type: "vector",
+        tiles: ["https://labs.os.uk/data/tiles/vector/hydroshed.php?z={z}&x={x}&y={y}.pbf"],
+        maxzoom: 12,
+      });
+
+      // Add a layer showing the boundary polygons.
+
+      map.addLayer({
+        id: "hydroshed-layer",
+        type: "fill",
+        source: "gb-hydroshed",
+        "source-layer": "gb-hydroshed", // from input filename
+        layout: {},
+        paint: {
+          "fill-color": "rgba(255, 31, 91, 0.2)",
+          "fill-outline-color": "black",
         },
-      });
+      }, 'OS/Surfacewater/Local');
 
-      map.dragRotate.disable(); // Disable map rotation using right click + drag.
-      map.touchZoomRotate.disableRotation(); // Disable map rotation using touch rotation gesture.
 
-      // Add navigation control (excluding compass button) to the map.
+      // Set visibility of roads to none:
+      map.getStyle().layers.filter(l => l.id.includes('Road')).map(l => map.setLayoutProperty(l.id, 'visibility', 'none'))
 
-      map.addControl(
-        new mapboxgl.NavigationControl({
-          showCompass: false,
-        })
-      );
 
-      map.on("load", function () {
-        // Add a source for the boundary polygons.
+      // // Add click event handler.
+      // map.on('click', function (e) {
+      //   var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
 
-        map.addSource("gb-hydroshed", {
-          type: "vector",
-          tiles: [localVectorTileServiceUrl + "/{z}/{x}/{y}.pbf"],
-          maxzoom: 12,
-        });
+      //   var features = map.queryRenderedFeatures(e.point);
 
-        // Add a layer showing the boundary polygons.
+      //   var displayProperties = [
+      //     'type',
+      //     'properties',
+      //     'layer',
+      //     'sourceLayer'
+      //   ];
 
-        map.addLayer({
-          id: "hydroshed-layer",
-          type: "fill",
-          source: "gb-hydroshed",
-          "source-layer": "gb-hydroshed-full", // from input filename
-          layout: {},
-          paint: {
-            "fill-color": "rgba(242, 133, 34, 0.4)",
-            "fill-outline-color": "rgba(242, 133, 34, 1)",
-          },
-        });
+      //   var displayFeatures = features.map(function (feat) {
+      //     var displayFeat = {};
+      //     displayProperties.forEach(function (prop) {
+      //       displayFeat[prop] = feat[prop];
+      //     });
+      //     return displayFeat;
+      //   });
 
-        // When a click event occurs on a feature in the boundaries layer, open a popup at the
+      //   displayFeatures = uniqueArray(displayFeatures);
 
-        // location of the click, with name HTML from its properties.
+      //   document.getElementById('features').innerHTML = JSON.stringify(
+      //     displayFeatures,
+      //     null,
+      //     2
+      //   );
+      // });
+    });
+  </script>
+</body>
 
-       // map.on("click", "hydroshe-layer", function (e) {
-      //    new mapboxgl.Popup()
-      //      .setLngLat(e.lngLat)
-       //     .setHTML(e.features[0].properties.Name)
-       //     .addTo(map);
-      //  });
-
-        // Change the cursor to a pointer when the mouse is over the boundaries layer.
-
-       // map.on("mouseenter", "hydroshed-layer", function () {
-       //   map.getCanvas().style.cursor = "pointer";
-       // });
-
-        // Change it back to a pointer when it leaves.
-
-       // map.on("mouseleave", "hydroshed-layer", function () {
-       //   map.getCanvas().style.cursor = "";
-       // });
-      });
-    </script>
-  </body>
 </html>
