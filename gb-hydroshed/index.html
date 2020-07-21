@@ -45,7 +45,7 @@
 
 <body>
   <div id="map"></div>
-  <!-- <pre id="features"></pre> -->
+  <pre id="features"></pre>
 
 
   <script src="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.js"></script>
@@ -86,6 +86,19 @@
       })
     );
 
+    map.on('style.load', function () {
+
+      // Set visibility of roads and some labels to none:
+      map.getStyle().layers.filter(l => l.id.includes('Road')).map(l => map.setLayoutProperty(l.id, 'visibility', 'none'))
+      map.setLayoutProperty('OS/Names/National/Town:3', 'visibility', 'none')
+      map.setLayoutProperty('OS/Names/National/National Park:1', 'visibility', 'none')
+
+      // Set water layers a touch darker, to raise them in the visual hierarchy
+      map.getStyle().layers.filter(l => l.id.includes('Surfacewater')).map(l => map.setPaintProperty(l.id, 'fill-color', '#3c93c2'))
+      map.getStyle().layers.filter(l => l.id.includes('Waterlines')).map(l => map.setPaintProperty(l.id, 'line-color', '#3c93c2'))
+      map.setPaintProperty('Background', 'fill-color', '#3c93c2')
+    })
+
     map.on("load", function () {
       // Add a source for the boundary polygons.
 
@@ -104,50 +117,60 @@
         "source-layer": "gb-hydroshed", // from input filename
         layout: {},
         paint: {
-          "fill-color": "rgba(255, 31, 91, 0.2)",
-          "fill-outline-color": "black",
+          "fill-color": "rgba(255, 31, 91, 0.2)"
         },
       }, 'OS/Surfacewater/Local');
 
 
-      // Set visibility of roads to none:
-      map.getStyle().layers.filter(l => l.id.includes('Road')).map(l => map.setLayoutProperty(l.id, 'visibility', 'none'))
+      map.addLayer({
+        id: "hydroshed-layer-outline",
+        type: "line",
+        source: "gb-hydroshed",
+        "source-layer": "gb-hydroshed", // from input filename
+        layout: {},
+        paint: {
+          "line-color": "#8f003b",
+          "line-width": [
+            'interpolate',
+            ['exponential', 0.5],
+            ['zoom'],
+            6, 0.5,
+            12, 3
+          ],
+        },
+      }, 'OS/Surfacewater/Local');
 
-      // Set water layers a touch darker, to raise them in the visual hierarchy
-      map.getStyle().layers.filter(l => l.id.includes('Surfacewater')).map(l => map.setPaintProperty(l.id, 'fill-color', '#3c93c2'))
-      map.getStyle().layers.filter(l => l.id.includes('Waterlines')).map(l => map.setPaintProperty(l.id, 'line-color', '#3c93c2'))
 
+       
+      // Add click event handler.
+      map.on('click', function (e) {
+        var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
 
+        var features = map.queryRenderedFeatures(e.point);
 
-      // // Add click event handler.
-      // map.on('click', function (e) {
-      //   var uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
+        var displayProperties = [
+          'type',
+          'properties',
+          'layer',
+          'sourceLayer'
+        ];
 
-      //   var features = map.queryRenderedFeatures(e.point);
+        var displayFeatures = features.map(function (feat) {
+          var displayFeat = {};
+          displayProperties.forEach(function (prop) {
+            displayFeat[prop] = feat[prop];
+          });
+          return displayFeat;
+        });
 
-      //   var displayProperties = [
-      //     'type',
-      //     'properties',
-      //     'layer',
-      //     'sourceLayer'
-      //   ];
+        displayFeatures = uniqueArray(displayFeatures);
 
-      //   var displayFeatures = features.map(function (feat) {
-      //     var displayFeat = {};
-      //     displayProperties.forEach(function (prop) {
-      //       displayFeat[prop] = feat[prop];
-      //     });
-      //     return displayFeat;
-      //   });
-
-      //   displayFeatures = uniqueArray(displayFeatures);
-
-      //   document.getElementById('features').innerHTML = JSON.stringify(
-      //     displayFeatures,
-      //     null,
-      //     2
-      //   );
-      // });
+        document.getElementById('features').innerHTML = JSON.stringify(
+          displayFeatures,
+          null,
+          2
+        );
+      }); 
     });
   </script>
 </body>
