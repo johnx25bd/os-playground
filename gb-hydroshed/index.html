@@ -113,6 +113,11 @@
       // Set visibility of roads to none:
       map.getStyle().layers.filter(l => l.id.includes('Road')).map(l => map.setLayoutProperty(l.id, 'visibility', 'none'))
 
+      // Set water layers a touch darker, to raise them in the visual hierarchy
+      map.getStyle().layers.filter(l => l.id.includes('Surfacewater')).map(l => map.setPaintProperty(l.id, 'fill-color', '#3c93c2'))
+      map.getStyle().layers.filter(l => l.id.includes('Waterlines')).map(l => map.setPaintProperty(l.id, 'line-color', '#3c93c2'))
+
+
 
       // // Add click event handler.
       // map.on('click', function (e) {
