@@ -35,8 +35,8 @@ information are available at http://www.hydrosheds.org._ -->
     crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="https://labs.os.uk/public/os-api-branding/v0.1.0/os-api-branding.css" />
-
   <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" />
+
   <style>
     body {
       margin: 0;
@@ -67,31 +67,16 @@ information are available at http://www.hydrosheds.org._ -->
 
     }
 
-    #overlay {
-      /* top: 20px;
-      left: 20px; */
-      /* max-width: 25%;
-      min-width: 20%; */
-      /* padding: 10px; */
-      background: white;
+    #info {
       font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-      /* position: absolute; */
       background-color: #fff;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-      /* padding: 15px; */
+      border-radius: 10px;
     }
 
-    #overlay h1 {
-      line-height: 1.1;
-      margin-top: 0px;
-    }
-
-    #overlay p {
-      margin-top: 10px;
-    }
 
     /* The switch - the box around the slider */
+    /* Rounded switch - from https://www.w3schools.com/howto/howto_css_switch.asp */
 
     .switch {
       position: relative;
@@ -101,7 +86,6 @@ information are available at http://www.hydrosheds.org._ -->
     }
 
     /* Hide default HTML checkbox */
-
     .switch input {
       opacity: 0;
       width: 0;
@@ -109,7 +93,6 @@ information are available at http://www.hydrosheds.org._ -->
     }
 
     /* The slider */
-
     .slider {
       position: absolute;
       cursor: pointer;
@@ -157,36 +140,36 @@ information are available at http://www.hydrosheds.org._ -->
     .slider.round:before {
       border-radius: 50%;
     }
+
+
+
   </style>
 </head>
 
 <body>
   <div id="map"></div>
   <div class='container-fluid'>
-  <div id='overlay' class='col-lg-3 col-md-6 col-sm-12 m-3 p-3'>
-    <h1>Watersheds of Great Britain</h1>
-    <p>A map using the
-      <a href='https://osdatahub.os.uk/docs/vts/overview' , target='_blank'>OS Vector Tile API</a> and
-      <a href='https://www.hydrosheds.org/' target='_blank'>HydroSHEDS dataset</a> to show the various watershed areas of Great Britain. Inspired by
-      <a href='https://decolonialatlas.wordpress.com/2019/11/19/watersheds-of-the-world/'
-        target="_blank">Watersheds of the World</a>. </p>
-    <p>Built with QGIS, Tippecanoe, Mapbox GL JS and 💛 by
-      <a href='https://twitter.com/johnx25bd' target='_blank'>@johnx25bd</a>. </p>
-    <!-- Rounded switch - from https://www.w3schools.com/howto/howto_css_switch.asp -->
-    <div>
-      <span>
-        <label class="switch mb-0">
-          <input id='labels' type="checkbox">
-          <span class="slider round"></span>
-        </label>
-      </span>
-      <span style='vertical-align:bottom;'>
-        <i>Toggle for extra context.</i>
-      </span>
+    <div id='info' class='col-lg-4 col-md-5 col-sm-6 col-xs-12 mt-4 p-3'>
+      <h1>Watersheds of Great Britain</h1>
+      <p>A map using the
+        <a href='https://osdatahub.os.uk/docs/vts/overview' , target='_blank'>OS Vector Tile API</a> and
+        <a href='https://www.hydrosheds.org/' target='_blank'>HydroSHEDS dataset</a> to show the various watershed areas of Great Britain. Inspired by
+        <a href='https://decolonialatlas.wordpress.com/2019/11/19/watersheds-of-the-world/' target="_blank">Watersheds of the World</a>. </p>
+      <p>Built with QGIS, Tippecanoe, Mapbox GL JS and 💛 by
+        <a href='https://twitter.com/johnx25bd' target='_blank'>@johnx25bd</a>. </p>
+      <div >
+        <span>
+          <i>Toggle for extra context.</i>
+        </span>
+        <span>
+          <label class="switch mb-0">
+            <input id='labels' type="checkbox">
+            <span class="slider round"></span>
+          </label>
+        </span>
+      </div>
     </div>
-
   </div>
-</div>
   <!-- <pre id="features"></pre> -->
 
 
@@ -201,7 +184,6 @@ information are available at http://www.hydrosheds.org._ -->
       osVectorTileServiceWaterUrl = " https://api.os.uk/maps/vector/v1/vts/water";
 
     // Initialize the map object.
-
     map = new mapboxgl.Map({
       container: "map",
       minZoom: 6,
@@ -225,7 +207,6 @@ information are available at http://www.hydrosheds.org._ -->
     map.touchZoomRotate.disableRotation(); // Disable map rotation using touch rotation gesture.
 
     // Add navigation control (excluding compass button) to the map.
-
     map.addControl(
       new mapboxgl.NavigationControl({
         showCompass: false,
