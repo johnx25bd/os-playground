@@ -18,103 +18,6 @@ var geoJson = {
 var intCount = 100, // Maximum number of features to be returned in a single response.
     intStartIndex = 0; // Initial result to start from when returning a response.
 
-// // Add an event listener to handle when the user clicks the 'Find Greenspace' button.
-// function fetchWhileAndTime(count, bbox = null) {
-
-//     var xml = null;
-//     if (bbox) {
-
-//         var coords = bbox[0] + ' ' + bbox[1];
-//         // Create an OGC XML filter parameter value which will select the Greenspace
-//         // features intersecting the BBOX coordinates.
-//         xml = '<ogc:Filter>';
-//         xml += '<ogc:BBOX>';
-//         xml += '<ogc:PropertyName>SHAPE</ogc:PropertyName>';
-//         xml += '<gml:Box srsName="urn:ogc:def:crs:EPSG::4326">';
-//         xml += '<gml:coordinates>' + coords + '</gml:coordinates>';
-//         xml += '</gml:Box>';
-//         xml += '</ogc:BBOX>';
-//         xml += '</ogc:Filter>';
-//     }
-
-
-
-//     // Define (WFS) parameters object.
-//     var wfsParams = {
-//         key: apiKey,
-//         service: 'WFS',
-//         request: 'GetFeature',
-//         version: '2.0.0',
-//         typeNames: 'Zoomstack_Greenspace',
-//         outputFormat: 'GEOJSON',
-//         srsName: 'urn:ogc:def:crs:EPSG::4326',
-//         filter: xml,
-//         count: intCount,
-//         startIndex: intStartIndex
-//     };
-
-//     // Use fetch() method to request GeoJSON data from the OS Features API.
-//     //
-//     // If successful - set the GeoJSON data for the 'greenspace' layer and re-render
-//     // the map.
-//     //
-//     // Calls can be made until the number of features returned is less than the
-//     // requested count, at which point it can be assumed that all features for
-//     // the query have been returned, and there is no need to request further pages.
-
-//     console.log(getUrl(wfsParams));
-
-//     var hrstart = process.hrtime();
-//     var pagestart = process.hrtime();
-
-
-//     fetchWhileAndTime(resultsRemain) {
-//         if (resultsRemain) {
-//             fetch(getUrl(wfsParams))
-//                 .then(response => response.json())
-//                 .then((data) => {
-//                     wfsParams.startIndex += wfsParams.count;
-
-//                     geoJson.features.push.apply(geoJson.features, data.features);
-
-//                     resultsRemain = data.features.length < wfsParams.count ? false : true;
-
-//                     fetchWhile(resultsRemain);
-//                 });
-//         }
-//         else {
-//             map.getSource('greenspace').setData(geoJson);
-//             document.getElementById('feature-count').innerHTML = geoJson.features.length;
-//         }
-//     }
-
-//     if (resultsRemain) {
-//         fetch(getUrl(wfsParams))
-//             .then(response => {
-//                 let pageend = process.hrtime(pagestart)
-//                 console.log('Response after ', pageend[1] / 1000000, 'ms')
-
-//                 return response.json()
-//             })
-//             .then((data) => {
-//                 wfsParams.startIndex += wfsParams.count;
-
-//                 geoJson.features.push.apply(geoJson.features, data.features);
-
-//                 if (geoJson.features.length >= count) {
-//                     resultsRemain = false;
-//                 }
-
-//                 intStartIndex += intCount;
-//             });
-//     }
-
-// }
-
-
-
-
-
 function fetchAndTime(count, polygon = null) {
 
     var xml = '';
@@ -142,8 +45,6 @@ function fetchAndTime(count, polygon = null) {
         xml += '</ogc:Filter>';
 
     }
-
-
 
     // Define parameters object.
     var wfsParams = {
@@ -257,4 +158,4 @@ var poly = {
     }
   }
 
-fetchAndTime(process.argv[2], poly)
+fetchAndTime(500, poly)
