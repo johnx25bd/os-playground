@@ -1,7 +1,9 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OS Vector Tile API | Basic Map (EPSG:3857) | Mapbox GL JS</title>
+    <title>OS Vector Tile API | Example Custom Style | Mapbox GL JS</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <link rel="stylesheet" href="https://labs.os.uk/public/os-api-branding/v0.2.0/os-api-branding.css" />
@@ -22,17 +24,18 @@
 
     var apiKey = 'U5xtfqZXdd1OkNEp1G47nePuF3CrZhMm';
 
-    var serviceUrl = 'https://api.os.uk/maps/vector/v1/vts';
+    var customStyleJson = 'https://raw.githubusercontent.com/OrdnanceSurvey/OS-Vector-Tile-API-Stylesheets/master/OS_VTS_3857_Open_Outdoor.json';
 
     // Initialize the map object.
     map = new mapboxgl.Map({
         container: 'map',
         minZoom: 6,
         maxZoom: 18,
-        style: serviceUrl + '/resources/styles?key=' + apiKey,
+        style: customStyleJson,
         center: [ -2.968, 54.425 ],
         zoom: 13,
         transformRequest: url => {
+            if(! /[?&]key=/.test(url) ) url += '?key=' + apiKey
             return {
                 url: url + '&srs=3857'
             }
