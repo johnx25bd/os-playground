@@ -1,0 +1,67 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OS Vector Tile API | Example Custom Style | Mapbox GL JS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://labs.os.uk/public/os-api-branding/v0.2.0/os-api-branding.css" />
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" />
+    <style>
+        body {
+            margin:0; 
+            padding:0; 
+        }
+
+        .container {
+            width:100%;
+            height:800px;
+            
+        }
+
+        .map { 
+            position:absolute; 
+            top:0; 
+            bottom:0; 
+            width:50%; 
+            border: 5px solid grey;
+        }
+
+        #map-premium-data {
+            margin-left: 50%;
+        }
+        h1 {
+            font-family: OSGill, sans-serif;
+            position: absolute;
+            padding: 10px;
+            margin-left: 50px;
+            background-color: white;
+        }
+        h1.premium-data {
+            margin-left: 52%;
+        }
+
+        :focus { 
+            outline: none; 
+        }
+    </style>
+</head>
+<body>
+
+<div class='container'>
+    <div id="map-open-data" class="map">
+    </div>
+    <h1 class='open-data'>OpenData</h1>
+    <div id="map-premium-data" class="map">
+    </div>
+    <h1 class='premium-data'>Premium</h1>
+
+</div>
+
+<script src="https://labs.os.uk/public/os-api-branding/v0.2.0/os-api-branding.js"></script>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+<script src="js/bundle.js"></script>
+
+</body>
+</html>
