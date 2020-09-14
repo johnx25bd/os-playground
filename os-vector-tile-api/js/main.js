@@ -16,7 +16,7 @@
         maxZoom: 18,
         style: customStyleJson,
         center:[ -2.96271235241079, 54.43276220221895],
-        zoom: 16.2,
+        zoom: 16,
         transformRequest: url => {
             if(! /[?&]key=/.test(url) ) url += '?key=' + apiKeyOpenData
             return {
@@ -46,7 +46,7 @@
         maxZoom: 18,
         style: serviceUrl + '/resources/styles?key=' + apiKeyPremium,
         center: [ -2.96271235241079, 54.43276220221895 ],
-        zoom: 16.2,
+        zoom: 16,
         transformRequest: url => {
             return {
                 url: url + '&srs=3857'
