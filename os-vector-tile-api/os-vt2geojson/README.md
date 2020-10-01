@@ -7,8 +7,8 @@ Demo script shows fetching one vector tile - easy to adapt to accept `z,x,y` and
 To run:
 
 ```bash
-git clone  
-# edit index.js to add Premium key from the OS Data Hub 
+git clone git@github.com:johnx25bd/os-playground.git && cd os-playground/os-vector-tile-api/os-vt2geojson
+# edit ./index.js to add Premium key from the OS Data Hub 
 npm install
 node index.js
 # GeoJSON will print to the console
