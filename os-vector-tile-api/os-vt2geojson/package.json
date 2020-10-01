@@ -1,0 +1,15 @@
+{
+  "name": "os-vt2geojson",
+  "version": "1.0.0",
+  "description": "OS vector tile to GeoJSON demo",
+  "main": "index.js",
+  "dependencies": {
+    "@mapbox/vt2geojson": "^1.1.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
